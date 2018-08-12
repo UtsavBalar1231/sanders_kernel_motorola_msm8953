@@ -100,7 +100,7 @@ export KBUILD_BUILD_USER=UtsavTheCunt
 export KBUILD_BUILD_HOST=Cunts-Space
 export ARCH=arm64
 make $KERNEL_DEFCONFIG O=out
-make  CROSS_COMPILE=~/gcc-9/bin/aarch64-elf-  -j$JOBS O=out
+make  CROSS_COMPILE_ARM32=~/arm/bin/arm-linux-androideabi- CROSS_COMPILE=~/gcc-9/bin/aarch64-elf-  -j$JOBS O=out
 
 ############################################################################################################################################################
 # Verify all the Necessary Stuff                                                                                                                           #
