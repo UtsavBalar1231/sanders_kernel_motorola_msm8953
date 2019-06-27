@@ -640,6 +640,7 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning,maybe-uninitialized,)
 
 # Silence 'address-of-packed-member' warning
 KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
+KBUILD_CFLAGS	+= $(call cc-disable-warning, psabi)
 
 # Disable packed not alined warnings
 KBUILD_CFLAGS   += $(call cc-disable-warning, packed-not-aligned)
