@@ -249,7 +249,8 @@ struct synaptics_rmi4_data {
 	struct regulator *regulator_avdd;
 	struct mutex rmi4_reset_mutex;
 	struct mutex rmi4_io_ctrl_mutex;
-	struct pm_qos_request pm_qos_req;
+	struct pm_qos_request pm_i2c_req;
+	struct pm_qos_request pm_touch_req;
 #if defined(CONFIG_FB)
 	struct work_struct fb_notify_work;
 	struct notifier_block fb_notif;
@@ -343,6 +344,8 @@ void synaptics_rmi4_dsx_new_function(struct synaptics_rmi4_exp_fn *exp_fn_mod,
 		bool insert);
 
 int synaptics_dsx_fw_updater(unsigned char *fw_data);
+
+unsigned int synaptics_rmi4_i2c_irq(void);
 
 int synaptics_dsx_get_dt_coords(struct device *dev, char *name,
 				struct synaptics_dsx_board_data *pdata,
