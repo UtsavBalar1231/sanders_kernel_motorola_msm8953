@@ -27,6 +27,7 @@
 
 #include <linux/version.h>
 #include <linux/debugfs.h>
+#include <linux/pm_qos.h>
 
 #if defined(CONFIG_FB)
 #include <linux/notifier.h>
@@ -248,6 +249,7 @@ struct synaptics_rmi4_data {
 	struct regulator *regulator_avdd;
 	struct mutex rmi4_reset_mutex;
 	struct mutex rmi4_io_ctrl_mutex;
+	struct pm_qos_request pm_qos_req;
 #if defined(CONFIG_FB)
 	struct work_struct fb_notify_work;
 	struct notifier_block fb_notif;

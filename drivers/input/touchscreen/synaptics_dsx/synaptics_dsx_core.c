@@ -1438,8 +1438,10 @@ static irqreturn_t synaptics_rmi4_irq(int irq, void *data)
 	if (IRQ_HANDLED == synaptics_filter_interrupt(data))
 		return IRQ_HANDLED;
 
+	/* prevent CPU from entering deep sleep */
+	pm_qos_update_request(&rmi4_data->pm_qos_req, 100);
 	synaptics_rmi4_sensor_report(rmi4_data);
-
+	pm_qos_update_request(&rmi4_data->pm_qos_req, PM_QOS_DEFAULT_VALUE);
 	return IRQ_HANDLED;
 }
 
@@ -1488,6 +1490,7 @@ static int synaptics_rmi4_irq_enable(struct synaptics_rmi4_data *rmi4_data,
 		if (rmi4_data->irq_enabled) {
 			disable_irq(rmi4_data->irq);
 			free_irq(rmi4_data->irq, rmi4_data);
+			pm_qos_remove_request(&rmi4_data->pm_qos_req);
 			rmi4_data->irq_enabled = false;
 		}
 	}
@@ -3704,6 +3707,9 @@ static int synaptics_rmi4_probe(struct platform_device *pdev)
 
 	rmi4_data->irq = gpio_to_irq(bdata->irq_gpio);
 
+	pm_qos_add_request(&rmi4_data->pm_qos_req, PM_QOS_CPU_DMA_LATENCY,
+			   PM_QOS_DEFAULT_VALUE);
+
 	if (!exp_data.initialized) {
 		mutex_init(&exp_data.mutex);
 		INIT_LIST_HEAD(&exp_data.list);
@@ -3778,6 +3784,7 @@ err_create_debugfs_dir:
 	free_irq(rmi4_data->irq, rmi4_data);
 
 err_enable_irq:
+	pm_qos_remove_request(&rmi4_data->pm_qos_req)
 #if defined(CONFIG_FB)
 	fb_unregister_client(&rmi4_data->fb_notif);
 #elif defined(CONFIG_HAS_EARLYSUSPEND)
