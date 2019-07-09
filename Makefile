@@ -652,22 +652,12 @@ KBUILD_CFLAGS   += $(call cc-disable-warning, missing-attributes)
 # Cortex-A53 Optimization Flags #
 #################################
 
-KBUILD_CFLAGS   += $(call cc-option, -g0,) \
-                   $(call cc-option, -ffast-math,) \
-                   $(call cc-option, -floop-nest-optimize,) \
-                   $(call cc-option, -fgraphite-identity,) \
-                   $(call cc-option, -ftree-loop-distribution,) \
-                   $(call cc-option, -funsafe-math-optimizations,) \
+KBUILD_CFLAGS   += $(call cc-option, -fgraphite-identity,) \
                    $(call cc-option, -mcpu=cortex-a53+crc+crypto+sve+simd,) \
                    $(call cc-option, -march=armv8-a+crc+crypto+sve+simd,) \
                    $(call cc-option, -mtune=cortex-a53,)
 
-KBUILD_AFLAGS   += $(call cc-option, -g0,) \
-                   $(call cc-option, -ffast-math,) \
-                   $(call cc-option, -floop-nest-optimize,) \
-                   $(call cc-option, -fgraphite-identity,) \
-                   $(call cc-option, -ftree-loop-distribution,) \
-                   $(call cc-option, -funsafe-math-optimizations,) \
+KBUILD_AFLAGS   += $(call cc-option, -fgraphite-identity,) \
                    $(call cc-option, -mcpu=cortex-a53+crc+crypto+sve+simd,) \
                    $(call cc-option, -march=armv8-a+crc+crypto+sve+simd,) \
                    $(call cc-option, -mtune=cortex-a53,)
