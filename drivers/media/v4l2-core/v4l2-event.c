@@ -219,8 +219,8 @@ int v4l2_event_subscribe(struct v4l2_fh *fh,
 	struct v4l2_subscribed_event *sev, *found_ev;
 	unsigned long flags;
 	unsigned i;
-	size_t sev_size;
 	int ret = 0;
+	size_t sev_size;
 
 	if (sub->type == V4L2_EVENT_ALL)
 		return -EINVAL;
@@ -254,14 +254,14 @@ int v4l2_event_subscribe(struct v4l2_fh *fh,
 
 	if (found_ev) {
 		/* Already listening */
-		kfree(sev);
+		kvfree(sev);
 	} else if (sev->ops && sev->ops->add) {
 		ret = sev->ops->add(sev, elems);
 		if (ret) {
 			spin_lock_irqsave(&fh->vdev->fh_lock, flags);
 			__v4l2_event_unsubscribe(sev);
 			spin_unlock_irqrestore(&fh->vdev->fh_lock, flags);
-			kfree(sev);
+			kvfree(sev);
 		}
 	}
 

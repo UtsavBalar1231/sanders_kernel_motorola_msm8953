@@ -215,6 +215,7 @@ static char *kdb_read(char *buffer, size_t bufsize)
 	int count;
 	int i;
 	int diag, dtab_count;
+	int key, buf_size, ret;
 	static int last_crlf;
 	int key, buf_size, ret;
 

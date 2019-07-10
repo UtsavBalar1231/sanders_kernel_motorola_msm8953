@@ -1232,8 +1232,8 @@ static struct attribute_group zram_disk_attr_group = {
 };
 
 static const struct attribute_group *zram_disk_attr_groups[] = {
-        &zram_disk_attr_group,
-        NULL,
+	&zram_disk_attr_group,
+	NULL,
 };
 
 /*
