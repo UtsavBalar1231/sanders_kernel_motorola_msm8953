@@ -4657,6 +4657,7 @@ CONFIG_NLS_ISO8859_1=y
 # CONFIG_DLM is not set
 # CONFIG_FILE_TABLE_DEBUG is not set
 # CONFIG_VIRTUALIZATION is not set
+CONFIG_FS_MBCACHE=y
 
 #
 # Kernel hacking
