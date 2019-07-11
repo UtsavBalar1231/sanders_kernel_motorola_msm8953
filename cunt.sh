@@ -1,0 +1,8 @@
+KERNEL_DIR=$PWD
+export ARCH=arm64
+export KBUILD_COMPILER_STRING=UtsavTheCunt-CuntsSpace
+
+make sanders_defconfig O=out
+make -j8 O=out \
+        CROSS_COMPILE_ARM32=~/arm/bin/arm-linux-androideabi- \
+        CROSS_COMPILE=~/gcc/bin/aarch64-linux-android- 2>&1 | tee error.log
