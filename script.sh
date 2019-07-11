@@ -18,12 +18,11 @@ KERNEL_DIR=$PWD
 HOMEPATH=/home/ubuntu2
 KERNEL_TOOLCHAIN=~/gcc/bin/aarch64-linux-android-
 CLANG_TOOLCHAIN=~/clang/bin/clang-9
-KERNEL_DEFCONFIG=potter_defconfig
-DTB=$KERNEL_DIR/dtbtool/
+KERNEL_DEFCONFIG=sanders_defconfig
 ZIP_DIR=$KERNEL_DIR/zip/
 KERNEL=IMMENSITY-KERNEL
 TYPE=RELEASE
-RELEASE=LA.UM.7.6.r1-05300
+RELEASE=HMP
 FINAL_KERNEL_ZIP=$KERNEL-$RELEASE-$TYPE-$DATE_POSTFIX.zip
 JOBS=8
 
@@ -107,25 +106,13 @@ export CLANG_TRIPLE=aarch64-linux-android-
 export CROSS_COMPILE=~/gcc/bin/aarch64-linux-android-
 make $KERNEL_DEFCONFIG O=out
 make  CC=~/clang/bin/clang-9 CLANG_TRIPLE=aarch64-linux-android- CROSS_COMPILE=~/gcc/bin/aarch64-linux-android-  -j$JOBS O=out
-############################################################################################################################################################
-# Generate DTB		                                                                                                                                   #
-############################################################################################################################################################
-
-echo -e "$cyan_________________________"
- echo " // - Generating DT.img - //"
-echo -e "______________________________$nocol"
-
-$DTB/dtbToolCM -2 -o $KERNEL_DIR/out/arch/arm64/boot/dtb -s 2048 -p $KERNEL_DIR/out/scripts/dtc/ $KERNEL_DIR/out/arch/arm64/boot/dts/qcom/
 
 ############################################################################################################################################################
 # Verify all the Necessary Stuff                                                                                                                           #
 ############################################################################################################################################################
 
 echo -e "$yellow // - Verify Image.gz - //"
-ls $KERNEL_DIR/out/arch/arm64/boot/Image.gz
-
-echo -e "$yellow // - Verify dtb - //"
-ls $KERNEL_DIR/out/arch/arm64/boot/dtb
+ls $KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb
 
 echo -e "$yellow // - Verifying zip Directory - //"
 ls $ZIP_DIR/
@@ -137,20 +124,16 @@ ls $ZIP_DIR/
 echo -e "$yellow // - Removing leftovers - //"
 rm -rf $ZIP_DIR/Image.gz
 rm -rf $ZIP_DIR/$FINAL_KERNEL_ZIP
-rm -rf $ZIP_DIR/dtb
 
 ############################################################################################################################################################
 
-echo -e "$yellow // - Copying Image.gz - //"
-cp $KERNEL_DIR/out/arch/arm64/boot/Image.gz $ZIP_DIR/treble-unsupported/
-############################################################################################################################################################
-
-echo -e "$yellow // - Copying dtb - //"
-cp $KERNEL_DIR/out/arch/arm64/boot/dtb $ZIP_DIR/treble-unsupported/
+echo -e "$yellow // - Copying Image.gz-dtb - //"
+cp $KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb $ZIP_DIR
 
 ############################################################################################################################################################
+
 echo -e "$yellow // - Time to zip everything up! - //"
-if [ -e out/arch/arm64/boot/Image.gz ]; then
+if [ -e out/arch/arm64/boot/Image.gz-dtb ]; then
 cd $ZIP_DIR
 zip -r9 $FINAL_KERNEL_ZIP * -x README $FINAL_KERNEL_ZIP
 cp $KERNEL_DIR/zip/$FINAL_KERNEL_ZIP $HOMEPATH/$FINAL_KERNEL_ZIP
@@ -165,9 +148,7 @@ cd $KERNEL_DIR
 ############################################################################################################################################################
 echo -e "$yellow // - Cleaning up - //$nocol"                                                                                                              #
 rm -rf $ZIP_DIR/$FINAL_KERNEL_ZIP															   #
-rm -rf $ZIP_DIR/Image.gz																   #
-rm -rf $ZIP_DIR/dtb																	   #
-rm -rf $ZIP_DIR/treble-unsupported															   #
+rm -rf $ZIP_DIR/Image.gz-dtb																     	#														   #
 rm -rf $KERNEL_DIR/out/																	   #
 																			   #
 ############################################################################################################################################################
